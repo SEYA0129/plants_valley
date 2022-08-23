@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% block footer %}
+
+<h3 class="mb-4">{{ rule_data.title }}</h3>
+<div class="card top mb-4">
+    <img src="{{ rule_data.image.url }}" alt="">
+</div>
+
+<div class="row">
+    <div class="col-sm-4 mb-4">
+        <h4 class="mb-3">INFORMATION</h4>
+        <p>
+            <i class="fas fa-laptop-code mr-2"></i>
+            <span class="font-weight-bolder">Comment: </span>
+            {{ rule_data.comment}}
+        </p>
+        <hr>
+        <p>
+            <i class="fab fa-font-awesome-flag"></i>
+            <span class="font-weight-bolder">参考URL: </span>
+            {% if rule_data.url %}
+                <a href="{{ rule_data.url }}" target="_blank" class="link-color">Link</a>
+            {% else %}
+                <!--URLがない場合、Privateと表示-->
+                Private
+            {% endif %}
+        </p>
+        <hr>
+        <p>
+            <i class="far fa-calendar-alt mr-2"></i>
+            <span class="font-weight-bolder">CREATED: </span>
+            {{ rule_data.created }}
+        </p>
+        <hr>
+    </div>
+    <div class="col-sm-8 mb-5">
+        <h4 class="mb-3">Rule DESCRIPTION</h4>
+        <p>{{ rule_data.description|linebreaksbr }}</p>
+    </div>
+</div>
+
+{% endblock %}
+{% endblock %}
