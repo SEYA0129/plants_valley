@@ -137,6 +137,51 @@ class PayWithStripe(LoginRequiredMixin, View):
             customer_email=request.user.email,
             payment_method_types=['card'],
             line_items=line_items,
+            #配送料を選択する
+            shipping_options=[
+            {
+             'shipping_rate_data': {
+                 'type': 'fixed_amount',
+                 'fixed_amount': {
+                    'amount': 990,
+                    'currency': 'JPY',
+                  },
+             'display_name': 'お急ぎの方',
+          # Delivers between 5-7 business days
+             'delivery_estimate': {
+                'minimum': {
+                  'unit': 'business_day',
+                  'value': 2,
+                },
+                'maximum': {
+                  'unit': 'business_day',
+                  'value': 7,
+                },
+              }
+            }
+          },
+          {
+            'shipping_rate_data': {
+              'type': 'fixed_amount',
+              'fixed_amount': {
+                'amount': 330,
+                'currency': 'JPY',
+              },
+              'display_name': 'ゆっくりでもいい方',
+          # Delivers in exactly 1 business day
+              'delivery_estimate': {
+                'minimum': {
+                  'unit': 'business_day',
+                  'value': 7,
+                },
+                'maximum': {
+                  'unit': 'business_day',
+                  'value': 14,
+                },
+              }
+            }
+          },
+            ],
             mode='payment',
             success_url=f'{settings.MY_URL}/pay/success/',
             cancel_url=f'{settings.MY_URL}/pay/cancel/',
