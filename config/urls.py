@@ -2,13 +2,21 @@ from django.contrib import admin
 from django.urls import path
 from base import views
 from django.contrib.auth.views import LogoutView
-from django.conf import settings # 本番環境で追加
-from django.conf.urls.static import static # 本番環境で追加
+from django.conf.urls.static import static 
+from django.conf import settings 
  
 
-if settings.DEBUG:  #本番環境で追加
-    urlpatterns = [
+#if settings.DEBUG:  #本番環境で追加
+urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # Introduce
+    path('introduce/', views.IntroduceView.as_view()),
+    path('detail/<int:pk>', views.DetailView.as_view(), name='detail'),
+    path('about/', views.AboutView.as_view(), name='about'),
+    path('contact/', views.ContactView.as_view(), name='contact'),
+    path('thanks/', views.ThanksView.as_view(), name='thanks'),
+    path('privacy/', views.PrivacyView.as_view(), name='privacy'),
  
     # Account
     path('login/', views.Login.as_view()),
@@ -37,6 +45,7 @@ if settings.DEBUG:  #本番環境で追加
     path('tags/<str:pk>/', views.TagListView.as_view()),
  
     path('', views.IndexListView.as_view()),  # トップページ
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) #本番環境で追記
-# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
+] #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) #本番環境で追記
 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
