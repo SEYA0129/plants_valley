@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base', #追記
     'widget_tweaks', #追記　pip install django-widgets-improved　contact.htmlの{% load widget_tweaks %}
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -157,7 +158,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static'] # 追記
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #本番環境用
 #STATIC_ROOT = '/usr/share/nginx/html/static'
-#MEDIA_ROOT =　'/usr/share/nginx/html/media'
+#MEDIA_ROOT = '/usr/share/nginx/html/media'
 
 
 # 消費税率
@@ -192,19 +193,18 @@ MESSAGE_TAGS = {
 }
 
 # custom_context_processors
-TITLE = 'めだか郷AWA'
+TITLE = 'Plants Valley'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 #開発環境用メール設定
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 """
-#本番環境用メール設定
+#本番環境用メール設定　※PASSWORDはログインパスワードではない。詳しくはググること
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -212,3 +212,4 @@ EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 """
+

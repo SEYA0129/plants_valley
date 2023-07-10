@@ -1,3 +1,10 @@
+#bg{
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-attachment: fixed;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -136,3 +143,11 @@ body {
 .link-inline li {
     display: inline;
     }
+
+.zoomable-image {
+        transition: transform 0.3s; /* アニメーション効果を追加する場合 */
+      }
+      
+.zoomable-image:hover {
+        transform: scale(1.2); /* 拡大倍率を指定（1.2は拡大倍率） */
+      }

@@ -1,8 +1,17 @@
-<div class="position-relative overflow-hidden p-3 p-md-5 text-center bg-light">
-    <div class="col-md-5 p-lg-5 mx-auto my-5">
-      <h1 class="display-4 fw-normal">{{ TITLE }}</h1>
-      <p class="lead fw-normal">四国三郎　～恵みの宝庫吉野川～　<br><br>趣味でめだかを販売しています。</p>
-    </div>
+{% load static %}  <!--2022.9.16追加-->
+<!--id="bg" style="background~~" 追加cssも追加している#bg-->
+<style>
+  .left-align {
+    text-align: left;
+  }
+</style>
+
+<div class="position-relative overflow-hidden p-3 p-md-5 text-center bg-light" id="bg" style="background-image: url( '{% static 'img/top.png' %}' );">
+
+  <div class="col-md-5 p-lg-5 mx-auto my-5 left-align">
+    <h1 class="display-4 fw-normal" style="font-family: 'Arial Black'; color: green;">{{ TITLE }}</h1>
+    <p class="lead fw-normal" style="color: white;">植物販売サイトです。<br><br>主に多肉植物と塊根植物、苔類を販売しています。<br>満足度の高い上質なお買い物を。</p>
+  </div>
     <div class="product-device shadow-sm d-none d-md-block"></div>
     <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
   </div>

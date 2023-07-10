@@ -40,10 +40,25 @@ class Item(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     image = models.ImageField(default="", blank=True,
-                              upload_to=upload_image_to)
+                              upload_to=upload_image_to) #orderモデル用に設定。基本的にItemPictureのordering=1と同じ画像にすること
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True)
     tags = models.ManyToManyField(Tag)
  
     def __str__(self):
         return self.name #django管理画面のアイテムnameを表示 name以外も表示できる
+
+
+class ItemPictures(models.Model):
+    image = models.ImageField(default="", blank=True, upload_to='item_pictures')
+    item = models.ForeignKey(
+        Item, on_delete=models.CASCADE
+    )
+    order = models.IntegerField()
+
+    class Meta:
+        db_table = 'item_pictures'
+        ordering = ['order']
+
+    def __str__(self):
+        return self.item.name + ':' + str(self.order)

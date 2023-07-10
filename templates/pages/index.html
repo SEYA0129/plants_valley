@@ -1,25 +1,33 @@
 {% extends 'base.html' %}
- 
+
 {% block main %}
- 
+
 {% include 'snippets/headline.html' %}
- 
-<div class="container px-5" style="max-width:100%">
- 
+
+<form method="get" action="" style="float:right;">
+  <p>値段で並び替える：
+    昇順<input type="radio" name="order_by_price" value="1" {% if ascending %}checked{% endif %}>
+    降順<input type="radio" name="order_by_price" value="2" {% if descending %}checked{% endif %}>
+   </p>
+   <p style="float:right;"><input type="submit" value="並び替える"  class="btn btn-secondary btn-sm"></p>   
+</form> 
+<br><br> 
+<div class="container px-5" style="max-width:100%"> 
   <div class="row my-5">
     {% for object in POPULAR_ITEMS %} <!--custom_context_processors.py-->
     {% if forloop.counter < 4 %} <div class="col-12 col-lg-4 my-3">
-      <button type="button" class="btn btn-danger rounded-0">{{ forloop.counter }}番人気</button>
+      <button type="button" class="btn btn-success rounded-0">{{ forloop.counter }}番人気</button>
       {% include 'snippets/item_box.html' %}
   </div>
   {% endif %}
   {% endfor %}
 </div>
- 
+
 <div class="row my-5">
   {% for object in object_list %}
   <div class="col-12 col-lg-3 my-3">
     {% include 'snippets/item_box.html' %}
+
   </div>
   {% endfor %}
 </div>

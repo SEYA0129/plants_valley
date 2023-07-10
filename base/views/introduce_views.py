@@ -164,3 +164,8 @@ class ThanksView(View):
 class PrivacyView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'pages/privacy.html')
+
+
+class CommercialView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'pages/commercial.html')

@@ -1,8 +1,10 @@
 from base.forms import UserCreationForm
 from django.contrib import admin
-from base.models import Item, Category, Tag, User, Profile, Order, Introduce, Rule, Experience, Education, Software, License
+from base.models import Item, Category, Tag, User, Profile, Order, Introduce, Rule, Experience, Education, Software, License, ItemPictures
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
+from django import forms  # 追記
+import json  # 追記
  
  
 class TagInline(admin.TabularInline):
@@ -35,10 +37,23 @@ class CustomUserAdmin(UserAdmin):
     )
  
     add_form = UserCreationForm
- 
+
     inlines = (ProfileInline,)
+
+class CustomJsonField(forms.JSONField):  # 追記
+    def prepare_value(self, value):  # 追記
+        loaded = json.loads(value)  # 追記
+        return json.dumps(loaded, indent=2, ensure_ascii=False)  # 追記
+    
+class OrderAdminForm(forms.ModelForm):  # 追記
+    items = CustomJsonField()  # 追記
+    shipping = CustomJsonField()  # 追記
  
-admin.site.register(Order)
+ 
+class OrderAdmin(admin.ModelAdmin):  # 追記
+    form = OrderAdminForm  # 追記
+ 
+admin.site.register(Order, OrderAdmin)  # OrderAdminを追記
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Category)
 admin.site.register(Tag)
@@ -50,3 +65,4 @@ admin.site.register(Experience)
 admin.site.register(Education)
 admin.site.register(Software)
 admin.site.register(License)
+admin.site.register(ItemPictures)

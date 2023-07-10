@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
- 
+from captcha.fields import CaptchaField
  
 class UserCreationForm(forms.ModelForm):
     password = forms.CharField()
@@ -27,3 +27,4 @@ class ContactForm(forms.Form):
     name = forms.CharField(max_length=100, label='名前')
     email = forms.EmailField(max_length=100, label='メールアドレス')
     message = forms.CharField(label='メッセージ', widget=forms.Textarea())
+    captcha = CaptchaField(label='画像認証')

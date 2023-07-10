@@ -1,6 +1,8 @@
+{% load static %} <!-- 追加2022.9.10 -->
+
 <nav class="navbar navbar-light navbar-expand-md py-1 bg-secondary">
-    
-  <a class="nav-link text-white" href="/">{{ TITLE }}</a>    
+  
+  <a class="nav-link text-white" href="/"><img src="{% static 'img/plants_valley_header.png' %}" alt="" width="30" height="30">&nbsp;{{ TITLE }}</a> <!-- 追加2022.9.10 -->
 
   <button class="navbar-toggler"  type="button" data-toggle="collapse" data-target="#responsiveMenu" aria-controls="responsiveMenu" aria-expanded="false" aria-label="Toggle navigation">
   <span class="navbar-toggler-icon"></span>
@@ -13,7 +15,7 @@
         <a class="nav-link text-white" href="/orders/">注文履歴</a> 
     </li>
     <li class="nav-item">
-        <a class="nav-link text-white" href="/profile/">プロフィール</a> 
+        <a class="nav-link text-white" href="/profile/">お客様情報</a> 
     </li>
     <li class="nav-item">
         <a class="nav-link text-white" href="/account/">アカウント</a> 
@@ -34,7 +36,7 @@
     <a class="nav-link text-white" href="/login/">ログイン</a>
     </li>
     <li class="nav-item">
-    <a class="nav-link text-white" href="/signup/">登録</a>
+    <a class="nav-link text-white" href="/signup/">登録（はじめてのお客様）</a>
     </li>
     {% endif %}
    </ul>

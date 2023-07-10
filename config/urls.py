@@ -3,7 +3,9 @@ from django.urls import path
 from base import views
 from django.contrib.auth.views import LogoutView
 from django.conf.urls.static import static 
-from django.conf import settings 
+from django.conf import settings
+from captcha import urls as captcha_urls
+from django.urls import include, path
  
 
 #if settings.DEBUG:  #本番環境で追加
@@ -17,6 +19,8 @@ urlpatterns = [
     path('contact/', views.ContactView.as_view(), name='contact'),
     path('thanks/', views.ThanksView.as_view(), name='thanks'),
     path('privacy/', views.PrivacyView.as_view(), name='privacy'),
+    path('commercial/', views.CommercialView.as_view(), name='commercial'),
+    path('captcha/', include(captcha_urls)),
  
     # Account
     path('login/', views.Login.as_view()),

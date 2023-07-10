@@ -1,7 +1,7 @@
 from django.conf import settings
 from base.models import Item
  
-  # pathになるだけ。settings78行目に追記
+  # pathになるだけ。settings81行目に追記
 def base(request):
     items = Item.objects.filter(is_published=True)
     return {

@@ -2,29 +2,52 @@ from django.shortcuts import redirect
 from django.views.generic import View, TemplateView
 from django.conf import settings
 from stripe.api_resources import tax_rate
-from base.models import Item, Order
+from base.models import Item, Order, ItemPictures
 import stripe
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core import serializers
 import json
 from django.contrib import messages
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), './PayPal-Python-SDK'))
+import paypalrestsdk
+
  
  
 stripe.api_key = settings.STRIPE_API_SECRET_KEY
+
  
  
 class PaySuccessView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/success.html'
  
     def get(self, request, *args, **kwargs):
-        # 最新のOrderオブジェクトを取得し、注文確定に変更
-        order = Order.objects.filter(
-            user=request.user).order_by('-created_at')[0]
+        # checkout_sessionで渡したクエリを取得
+        order_id = request.GET.get('order_id')
+
+        #id と現userでOrderオブジェクトのリストを取得
+        orders = Order.objects.filter(user=request.user, id=order_id)
+
+        # もし要素数が１でなければ以降に進まないようにここでreturn
+        if len(orders) != 1:
+            #好みでリダイレクトメッセージを表示しても良い
+            return super().get(request, *args, **kwargs)
+        
+        # １つの要素を変数へ代入
+        order = orders[0]
+
+        # すでにis_confirmed=Trueなら以降には進まないようにここでreturn
+        if order.is_confirmed:
+            #好みでリダイレクトメッセージを表示しても良い
+            return super().get(request, *args, **kwargs)        
+
         order.is_confirmed = True  # 注文確定
         order.save()
  
         # カート情報削除
-        del request.session['cart']
+        if 'cart' in request.session:
+            del request.session['cart']
  
         return super().get(request, *args, **kwargs)
  
@@ -33,20 +56,18 @@ class PayCancelView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/cancel.html'
  
     def get(self, request, *args, **kwargs):
-        # 最新のOrderオブジェクトを取得
-        order = Order.objects.filter(
-            user=request.user).order_by('-created_at')[0]
- 
-        # 在庫数と販売数を元の状態に戻す
-        for elem in json.loads(order.items):
-            item = Item.objects.get(pk=elem['pk'])
-            item.sold_count -= elem['quantity']
-            item.stock += elem['quantity']
-            item.save()
- 
-        # is_confirmedがFalseであれば削除（仮オーダー削除）
-        if not order.is_confirmed:
-            order.delete()
+        # 現userの仮Orderオブジェクトのリストを取得
+        orders = Order.objects.filter(user=request.user, is_confirmed=False)        
+
+        for order in orders:
+            # 在庫数と販売数を元の状態に戻す
+            for elem in json.loads(order.items):
+                item = Item.objects.get(pk=elem['pk'])
+                item.sold_count -= elem['quantity']
+                item.stock += elem['quantity']
+                item.save()
+        # 仮オーダーを全て削除
+        orders.delete()
  
         return super().get(request, *args, **kwargs)
  
@@ -92,7 +113,7 @@ class PayWithStripe(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         # プロフィールが埋まっているかどうか確認
         if not check_profile_filled(request.user.profile):
-            messages.warning(request, '配送のに必要なのでプロフィールを埋めて下さい。')
+            messages.warning(request, '配送に必要なのでプロフィールを埋めて下さい。')
             return redirect('/profile/')
  
         cart = request.session.get('cart', None)
@@ -123,8 +144,8 @@ class PayWithStripe(LoginRequiredMixin, View):
             item.sold_count += quantity
             item.save()
  
-        # 仮注文を作成（is_confirmed=Flase)
-        Order.objects.create(
+        # 仮注文を作成（is_confirmed=False)
+        order = Order.objects.create(
             user=request.user,
             uid=request.user.pk,
             items=json.dumps(items),
@@ -135,7 +156,13 @@ class PayWithStripe(LoginRequiredMixin, View):
  
         checkout_session = stripe.checkout.Session.create(
             customer_email=request.user.email,
-            payment_method_types=['card'],
+            payment_method_types=['card', 'konbini'],
+            # The parameter is optional. The default value of expires_after_days is 3.
+            payment_method_options={
+             'konbini' : {
+                'expires_after_days': 5,
+                },
+                },
             line_items=line_items,
             #配送料を選択する
             shipping_options=[
@@ -143,7 +170,7 @@ class PayWithStripe(LoginRequiredMixin, View):
              'shipping_rate_data': {
                  'type': 'fixed_amount',
                  'fixed_amount': {
-                    'amount': 990,
+                    'amount': 1000,
                     'currency': 'JPY',
                   },
              'display_name': 'お急ぎの方',
@@ -164,7 +191,7 @@ class PayWithStripe(LoginRequiredMixin, View):
             'shipping_rate_data': {
               'type': 'fixed_amount',
               'fixed_amount': {
-                'amount': 330,
+                'amount': 500,
                 'currency': 'JPY',
               },
               'display_name': 'ゆっくりでもいい方',
@@ -183,7 +210,9 @@ class PayWithStripe(LoginRequiredMixin, View):
           },
             ],
             mode='payment',
-            success_url=f'{settings.MY_URL}/pay/success/',
+            # success_url には、クエリで注文IDを渡しておく
+            success_url=f'{settings.MY_URL}/pay/success/?order_id={order.pk}',
             cancel_url=f'{settings.MY_URL}/pay/cancel/',
         )
         return redirect(checkout_session.url)
+

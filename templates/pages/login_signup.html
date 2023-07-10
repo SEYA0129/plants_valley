@@ -4,11 +4,17 @@
 <div class="container my-5">
   <div class="row ">
     <div class="col-12">
+      {% if 'login' in request.path %} <!--追加※add_cart時に登録してない人-->
+      <a href="http://127.0.0.1:8000/signup/">登録がまだの方はこちらへ</a>
+      {% endif %}
       <h1>
         {% if 'login' in request.path %}
         ログイン画面
         {% elif 'signup' in request.path %}
         登録画面
+        <div>
+        <h4>(はじめてのお客様はこちらから登録後、ログインしてください）</h4>
+       </div>
         {% endif %}
       </h1>
       <form method="POST">
@@ -30,11 +36,12 @@
         </div>
         <button class="btn btn-info btm-sm" type="submit">
           {% if 'login' in request.path %}
-          Login
+          ログイン　（Login）
           {% elif 'signup' in request.path %}
-          Signup
+          登録　（Signup）
           {% endif %}
         </button>
+        <input type="hidden" name="next" value="{{ next }}" />
       </form>
     </div>
   </div>

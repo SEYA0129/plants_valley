@@ -6,10 +6,13 @@
 
 <div class="card text-center contact mx-auto rounded">
     <div class="card-body">
-        <h2 class="mb-4">Contact Me</h2>
+        <h2 class="mb-4">お問い合わせフォーム</h2>
         <form method="POST">
             <!-- フォームを安全に送信するために必ず必要なタグ -->
             {% csrf_token %}
+            <div class="mb-3">
+                {% render_field form.captcha %}
+            </div>
             <div class="mb-3">
                 {% render_field form.name class='form-control' placeholder='名前' %}
             </div>
