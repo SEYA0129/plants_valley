@@ -27,7 +27,7 @@
         <p class="lead">残り{{object.stock}}個
         </p>
         <p class="lead">¥{{object.price}}（税別）</p>
-        <p class="lead">{{object.description |urlize }}</p>
+        <p class="lead"><font size="2">{{object.description |urlize |linebreaksbr }}</font></p>
         <form action="/cart/add/" method="POST" class="">
           {% csrf_token %}
           <input type="hidden" name="item_pk" value="{{object.pk}}">
