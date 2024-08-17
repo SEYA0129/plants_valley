@@ -91,6 +91,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+
 #開発用
 
 DATABASES = {
@@ -99,7 +100,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-"""
+
+'''
 # 本番用
 DATABASES = {
     'default': {
@@ -111,8 +113,7 @@ DATABASES = {
         'PORT': '',
     }
 }
-"""
-
+'''
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -203,13 +204,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #開発環境用メール設定
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-"""
-#本番環境用メール設定　※PASSWORDはログインパスワードではない。詳しくはググること
+'''
+#本番環境用メール設定 ※PASSWORDはログインパスワードではない。詳しくはググること
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
-"""
-
+'''

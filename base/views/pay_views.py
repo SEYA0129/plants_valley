@@ -8,10 +8,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core import serializers
 import json
 from django.contrib import messages
-import sys
-import os
-sys.path.append(os.path.join(os.path.dirname(__file__), './PayPal-Python-SDK'))
-import paypalrestsdk
+
+
 
  
  
