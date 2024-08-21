@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 追記 ---
 env = environ.Env()
-root = environ.Path(BASE_DIR / 'secrets')
+root = environ.Path(str(BASE_DIR / 'secrets'))
 
 # 本番環境用
 #env.read_env(root('.env.prod'))

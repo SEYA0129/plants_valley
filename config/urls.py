@@ -8,7 +8,6 @@ from captcha import urls as captcha_urls
 from django.urls import include, path
  
 
-#if settings.DEBUG:  #本番環境で追加
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -49,7 +48,15 @@ urlpatterns = [
     path('tags/<str:pk>/', views.TagListView.as_view()),
  
     path('', views.IndexListView.as_view()),  # トップページ
-] #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) #本番環境で追記
+]
 
+#開発環境
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+'''
+#本番環境
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+'''
