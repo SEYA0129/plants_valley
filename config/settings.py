@@ -105,12 +105,12 @@ DATABASES = {
 # 本番用
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'myproject',
         'USER': 'myprojectuser',
         'PASSWORD': 'password',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '5432',
     }
 }
 '''
