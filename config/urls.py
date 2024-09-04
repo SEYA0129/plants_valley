@@ -22,9 +22,9 @@ urlpatterns = [
     path('captcha/', include(captcha_urls)),
  
     # Account
-    path('login/', views.Login.as_view()),
-    path('logout/', LogoutView.as_view()),
-    path('signup/', views.SignUpView.as_view()),
+    path('login/', views.Login.as_view(),name='login'),#変更
+    path('logout/', LogoutView.as_view(),name='logout'),#変更
+    path('signup/', views.SignUpView.as_view(),name='signup'), #変更
     path('account/', views.AccountUpdateView.as_view()),
     path('profile/', views.ProfileUpdateView.as_view()),
  

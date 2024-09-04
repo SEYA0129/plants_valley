@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-light navbar-expand-md py-1 bg-secondary">
   
-  <a class="nav-link text-white" href="/"><img src="{% static 'img/plants_valley_header.png' %}" alt="" width="30" height="30">&nbsp;{{ TITLE }}</a> <!-- 追加2022.9.10 -->
+  <a class="nav-link text-white" href="/"><img src="{% static 'img/Plants_Valley_header.png' %}" alt="" width="30" height="30">&nbsp;{{ TITLE }}</a> <!-- 追加2022.9.10 -->
 
   <button class="navbar-toggler"  type="button" data-toggle="collapse" data-target="#responsiveMenu" aria-controls="responsiveMenu" aria-expanded="false" aria-label="Toggle navigation">
   <span class="navbar-toggler-icon"></span>
@@ -27,6 +27,7 @@
     {% endif %}
      </a>
     </li>
+    <!-- chatgptによって指摘されたので変更した。urls.pyにも影響
      {% if user.is_authenticated %}
      <li class="nav-item">
      <a class="nav-link text-white" href="/logout/">ログアウト</a>
@@ -37,6 +38,22 @@
     </li>
     <li class="nav-item">
     <a class="nav-link text-white" href="/signup/">登録（はじめてのお客様）</a>
+    </li>
+    {% endif %}
+    -->
+    {% if user.is_authenticated %}
+    <li class="nav-item">
+        <form method="post" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="nav-link text-white" style="background: none; border: none;">ログアウト</button>
+        </form>
+    </li>
+    {% else %}
+    <li class="nav-item">
+        <a class="nav-link text-white" href="{% url 'login' %}">ログイン</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" href="{% url 'signup' %}">登録（はじめてのお客様）</a>
     </li>
     {% endif %}
    </ul>

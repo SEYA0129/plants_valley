@@ -40,18 +40,29 @@ class CustomUserAdmin(UserAdmin):
 
     inlines = (ProfileInline,)
 
-class CustomJsonField(forms.JSONField):  # 追記
-    def prepare_value(self, value):  # 追記
-        loaded = json.loads(value)  # 追記
-        return json.dumps(loaded, indent=2, ensure_ascii=False)  # 追記
-    
-class OrderAdminForm(forms.ModelForm):  # 追記
-    items = CustomJsonField()  # 追記
-    shipping = CustomJsonField()  # 追記
- 
- 
-class OrderAdmin(admin.ModelAdmin):  # 追記
-    form = OrderAdminForm  # 追記
+class CustomJsonField(forms.JSONField):
+    def prepare_value(self, value):
+        if isinstance(value, str):
+            try:
+                # Try to load JSON data
+                loaded = json.loads(value)
+                return json.dumps(loaded, indent=2, ensure_ascii=False)
+            except (TypeError, json.JSONDecodeError):
+                # Handle the case where value is not valid JSON
+                return value
+        # If value is not a string, just return it as is
+        return value
+
+class OrderAdminForm(forms.ModelForm):
+    items = CustomJsonField()
+    shipping = CustomJsonField()
+
+    class Meta:
+        model = Order
+        fields = '__all__'
+
+class OrderAdmin(admin.ModelAdmin):
+    form = OrderAdminForm
  
 admin.site.register(Order, OrderAdmin)  # OrderAdminを追記
 admin.site.register(Item, ItemAdmin)

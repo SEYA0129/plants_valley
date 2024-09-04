@@ -161,6 +161,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #STATIC_ROOT = '/usr/share/nginx/html/static'
 #MEDIA_ROOT = '/usr/share/nginx/html/media'
 
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB 本番環境で追加 nginxの設定も必要。詳しくはchatgptにて。
 
 # 消費税率
 TAX_RATE = 0.1

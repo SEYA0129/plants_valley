@@ -5,7 +5,8 @@
   <div class="row ">
     <div class="col-12">
       {% if 'login' in request.path %} <!--追加※add_cart時に登録してない人-->
-      <a href="http://127.0.0.1:8000/signup/">登録がまだの方はこちらへ</a>
+      <!--<a href="http://127.0.0.1:8000/signup/">登録がまだの方はこちらへ</a>-->
+      <a href="{% url 'signup' %}">登録がまだの方はこちらへ</a> <!--本番環境でエラーが見つかり変更した-->
       {% endif %}
       <h1>
         {% if 'login' in request.path %}
